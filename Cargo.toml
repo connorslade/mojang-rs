@@ -15,3 +15,4 @@ readme = "README.md"
 [dependencies]
 ureq = "2.3.0"
 tinyjson = "2.3.0"
+sha-1 = "0.9.8"
