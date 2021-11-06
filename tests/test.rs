@@ -10,7 +10,8 @@ fn test_make_player_name() {
         player,
         Player {
             name: "Sigma76".to_string(),
-            uuid: "3c358264b4564bdeab1efe1023db6679".to_string()
+            uuid: "3c358264b4564bdeab1efe1023db6679".to_string(),
+            skin_url: "http://textures.minecraft.net/texture/c05f5efaf313464bde6060fb48aab8e6d07202cae19c764daee52029663df8b4".to_string()
         }
     )
 }
@@ -23,7 +24,8 @@ fn test_make_player_uuid() {
         player,
         Player {
             name: "Sigma76".to_string(),
-            uuid: "3c358264b4564bdeab1efe1023db6679".to_string()
+            uuid: "3c358264b4564bdeab1efe1023db6679".to_string(),
+            skin_url: "http://textures.minecraft.net/texture/c05f5efaf313464bde6060fb48aab8e6d07202cae19c764daee52029663df8b4".to_string()
         }
     )
 }

@@ -1,9 +1,8 @@
-- [ ] isServerBlocked
+- [X] isServerBlocked
 - [ ] getNameHistory
 - [ ] getNameAtDate
-- [ ] statusCheck
-- [ ] nameToUuid
-- [ ] uuidToName
-- [ ] getSkin
+- [X] nameToUuid
+- [X] uuidToName
+- [X] getSkin
 - [X] stats
 - [X] player

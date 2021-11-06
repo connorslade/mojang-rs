@@ -55,7 +55,7 @@ impl BlockedServers {
     }
 }
 
-fn check_if_blocked(hashes: &Vec<String>, to_check: String) -> bool {
+fn check_if_blocked(hashes: &[String], to_check: String) -> bool {
     let mut hasher = Sha1::new();
     hasher.update(to_check.into_bytes());
     let hash = format!("{:#02X}", hasher.finalize()).to_lowercase();
