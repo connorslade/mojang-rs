@@ -1,4 +1,5 @@
 use mojang::Player;
+use mojang::Stats;
 
 #[test]
 fn test_make_player_name() {
@@ -24,4 +25,12 @@ fn test_make_player_uuid() {
             uuid: "3c358264b4564bdeab1efe1023db6679".to_string()
         }
     )
+}
+
+#[test]
+fn test_get_stats() {
+    let stats = Stats::new().unwrap();
+
+    assert!(stats.total >= 44_354_540);
+    assert!(stats.sale_per_sec >= 0_f32);
 }

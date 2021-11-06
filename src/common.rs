@@ -17,31 +17,28 @@ pub fn ureq_agent() -> Agent {
 /// Rerutns (name, uuid)
 pub fn uuid_to_name(uuid: String) -> Result<(String, String), MojangError> {
     let agent = ureq_agent();
-    match agent
+    let json = match agent
         .get(&format!(
             "https://sessionserver.mojang.com/session/minecraft/profile/{}",
             uuid.replace("-", "").to_lowercase()
         ))
         .call()
     {
-        Ok(i) => {
-            let json = &i.into_string().unwrap().parse::<JsonValue>().unwrap();
-
-            let name = match &json["name"] {
-                JsonValue::String(i) => i.to_string(),
-                _ => return Err(MojangError::ParseError),
-            };
-
-            let uuid = match &json["id"] {
-                JsonValue::String(i) => i.to_string(),
-                _ => return Err(MojangError::ParseError),
-            };
-
-            return Ok((name, uuid));
-        }
-
+        Ok(i) => i.into_string().unwrap().parse::<JsonValue>().unwrap(),
         Err(_) => return Err(MojangError::RequestError),
     };
+
+    let name = match &json["name"] {
+        JsonValue::String(i) => i.to_string(),
+        _ => return Err(MojangError::ParseError),
+    };
+
+    let uuid = match &json["id"] {
+        JsonValue::String(i) => i.to_string(),
+        _ => return Err(MojangError::ParseError),
+    };
+
+    return Ok((name, uuid));
 }
 
 /// Rerutns (name, uuid)
