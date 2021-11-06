@@ -5,4 +5,4 @@ mod stats;
 
 pub use mojang_error::MojangError;
 pub use player::Player;
-pub use stats::Stats;
+pub use stats::{MetricKeys, Stats};

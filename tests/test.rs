@@ -1,5 +1,5 @@
 use mojang::Player;
-use mojang::Stats;
+use mojang::{MetricKeys, Stats};
 
 #[test]
 fn test_make_player_name() {
@@ -32,5 +32,19 @@ fn test_get_stats() {
     let stats = Stats::new().unwrap();
 
     assert!(stats.total >= 44_354_540);
-    assert!(stats.sale_per_sec >= 0_f32);
+}
+
+#[test]
+fn test_get_custom_stats() {
+    let stats = Stats::new_metrics(vec![
+        MetricKeys::ItemSoldMinecraft,
+        MetricKeys::PrepaidCardRedeemedMinecraft,
+        MetricKeys::ItemSoldCobalt,
+        MetricKeys::ItemSoldScrolls,
+        MetricKeys::PrepaidCardRedeemedCobalt,
+        MetricKeys::ItemSoldDungeons,
+    ])
+    .unwrap();
+
+    assert!(stats.total >= 44_825_767)
 }
