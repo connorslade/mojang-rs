@@ -1,6 +1,6 @@
 - [X] isServerBlocked
 - [X] getNameHistory
-- [ ] getNameAtDate
+- [X] getNameAtDate
 - [X] nameToUuid
 - [X] uuidToName
 - [X] getSkin

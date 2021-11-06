@@ -4,7 +4,7 @@ use ureq::Error;
 
 #[derive(Debug)]
 pub enum MojangError {
-    NoNameOrUUID,
+    NotEnoughData,
 
     ReadError(io::Error),
     RequestError(Error),

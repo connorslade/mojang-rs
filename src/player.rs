@@ -60,4 +60,19 @@ impl Player {
             ..self
         })
     }
+
+    pub fn name_at(&self, time: u64) -> Result<String, MojangError> {
+        if self.name_changes.is_none() {
+            return Err(MojangError::NotEnoughData);
+        }
+
+        let mut final_name = self.name.clone();
+        for name in self.name_changes.clone().unwrap() {
+            if name.0 <= time {
+                final_name = name.1;
+            }
+        }
+
+        Ok(final_name)
+    }
 }

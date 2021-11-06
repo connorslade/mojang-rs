@@ -81,6 +81,14 @@ fn test_get_name_changes_2() {
 }
 
 #[test]
+fn test_get_name_at() {
+    let player = Player::new("NoWeDont").unwrap().add_name_change().unwrap();
+
+    assert_eq!(player.name_at(1423342340000).unwrap(), "MojangSucksDick");
+    assert_eq!(player.name_at(1636239900000).unwrap(), "NoWeDont");
+}
+
+#[test]
 fn test_get_stats() {
     let stats = Stats::new().unwrap();
 
