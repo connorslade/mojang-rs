@@ -1,0 +1,12 @@
+- [ ] isServerBlocked
+- [ ] getNameHistory
+- [ ] getNameAtDate
+- [ ] statusCheck
+- [ ] nameToUuid
+- [ ] uuidToName
+- [ ] getSkin
+- [ ] stats
+- [ ] player
+
+- On player new access API to get missing parmater (name / UUID)
+- Also add a full_new function if you want to supply the values manually
