@@ -16,7 +16,7 @@ impl BlockedServers {
             .call()
         {
             Ok(i) => i.into_string().unwrap(),
-            Err(_) => return Err(MojangError::RequestError),
+            Err(e) => return Err(MojangError::RequestError(e)),
         };
 
         Ok(BlockedServers {

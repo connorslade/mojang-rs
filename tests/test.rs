@@ -11,7 +11,8 @@ fn test_make_player_name() {
         Player {
             name: "Sigma76".to_string(),
             uuid: "3c358264b4564bdeab1efe1023db6679".to_string(),
-            skin_url: "http://textures.minecraft.net/texture/c05f5efaf313464bde6060fb48aab8e6d07202cae19c764daee52029663df8b4".to_string()
+            skin_url: None,
+            name_changes: None,
         }
     )
 }
@@ -25,7 +26,56 @@ fn test_make_player_uuid() {
         Player {
             name: "Sigma76".to_string(),
             uuid: "3c358264b4564bdeab1efe1023db6679".to_string(),
-            skin_url: "http://textures.minecraft.net/texture/c05f5efaf313464bde6060fb48aab8e6d07202cae19c764daee52029663df8b4".to_string()
+            skin_url: Some("http://textures.minecraft.net/texture/c05f5efaf313464bde6060fb48aab8e6d07202cae19c764daee52029663df8b4".to_string()),
+            name_changes: None
+        }
+    )
+}
+
+#[test]
+fn test_get_skin_url() {
+    let player = Player::new("Sigma76").unwrap().add_skin().unwrap();
+
+    assert_eq!(
+        player,
+        Player {
+            name: "Sigma76".to_string(),
+            uuid: "3c358264b4564bdeab1efe1023db6679".to_string(),
+            skin_url: Some("http://textures.minecraft.net/texture/c05f5efaf313464bde6060fb48aab8e6d07202cae19c764daee52029663df8b4".to_string()),
+            name_changes: None
+        }
+    )
+}
+
+#[test]
+fn test_get_name_changes() {
+    let player = Player::new("Sigma76").unwrap().add_name_change().unwrap();
+
+    assert_eq!(
+        player,
+        Player {
+            name: "Sigma76".to_string(),
+            uuid: "3c358264b4564bdeab1efe1023db6679".to_string(),
+            skin_url: None,
+            name_changes: Some(vec![(0, "Sigma76".to_string())])
+        }
+    )
+}
+
+#[test]
+fn test_get_name_changes_2() {
+    let player = Player::new("NoWeDont").unwrap().add_name_change().unwrap();
+
+    assert_eq!(
+        player,
+        Player {
+            name: "NoWeDont".to_string(),
+            uuid: "be1d2795758c44a3b0b81c9dcd370560".to_string(),
+            skin_url: None,
+            name_changes: Some(vec![
+                (0, "MojangSucksDick".to_string()),
+                (1429806490000, "NoWeDont".to_string())
+            ])
         }
     )
 }

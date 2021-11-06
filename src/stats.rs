@@ -61,12 +61,12 @@ impl Stats {
             .send_string(&get_keys_json(metrics.clone()))
         {
             Ok(i) => i,
-            Err(_) => return Err(MojangError::RequestError),
+            Err(e) => return Err(MojangError::RequestError(e)),
         };
 
         let json = match resp.into_string() {
             Ok(i) => i.parse::<JsonValue>().unwrap(),
-            Err(_) => return Err(MojangError::RequestError),
+            Err(e) => return Err(MojangError::ReadError(e)),
         };
 
         let total = match &json["total"] {

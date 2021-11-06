@@ -1,5 +1,5 @@
 - [X] isServerBlocked
-- [ ] getNameHistory
+- [X] getNameHistory
 - [ ] getNameAtDate
 - [X] nameToUuid
 - [X] uuidToName
