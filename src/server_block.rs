@@ -3,12 +3,34 @@ use sha1::{Digest, Sha1};
 use crate::common;
 use crate::MojangError;
 
+/// Info on all Mojang Blocked Servers
+/// ## Example
+/// ```rust
+/// // Import Lib
+/// use mojang::BlockedServers;
+///
+/// // Get Blocked Servers
+/// let blocked = BlockedServers::new().unwrap();
+///
+/// // Check if server is blocked
+/// assert!(blocked.blocked("mc.playmc.mx"));
+/// ```
 #[derive(Debug, Clone)]
 pub struct BlockedServers {
+    /// Hashes of all Blocked Servers
     pub hashes: Vec<String>,
 }
 
 impl BlockedServers {
+    /// Fetch current Blocked Servers List
+    /// ## Example
+    /// ```rust
+    /// // Import Lib
+    /// use mojang::BlockedServers;
+    ///
+    /// // Get Blocked Servers
+    /// let blocked = BlockedServers::new().unwrap();
+    /// ```
     pub fn new() -> Result<BlockedServers, MojangError> {
         let agent = common::ureq_agent();
         let resp = match agent
@@ -24,6 +46,18 @@ impl BlockedServers {
         })
     }
 
+    /// Check if supplyd Url or IPv4 adress is in the blocklist
+    /// ## Example
+    /// ```rust
+    /// // Import Lib
+    /// use mojang::BlockedServers;
+    ///
+    /// // Fetch Blocked Servers
+    /// let blocked = BlockedServers::new().unwrap();
+    ///
+    /// // Check if server is blocked
+    /// assert!(blocked.blocked("mc.playmc.mx"));
+    /// ```
     pub fn blocked<T>(&self, server: T) -> bool
     where
         T: std::fmt::Display,

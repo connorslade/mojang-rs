@@ -1,3 +1,5 @@
+#![warn(missing_docs)]
+
 mod common;
 mod mojang_error;
 mod player;
