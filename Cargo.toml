@@ -17,3 +17,6 @@ ureq = "2.3.0"
 tinyjson = "2.3.0"
 sha-1 = "0.9.8"
 base64 = "0.13.0"
+
+[features]
+timeout = []

@@ -1,3 +1,4 @@
+#[cfg(feature = "timeout")]
 use std::time::Duration;
 
 use tinyjson::JsonValue;
@@ -8,10 +9,14 @@ use crate::MojangError;
 
 /// Defult Agent for all Requests
 pub fn ureq_agent() -> Agent {
-    AgentBuilder::new()
+    #[cfg(feature = "timeout")]
+    return AgentBuilder::new()
         .timeout(Duration::from_secs(4))
-        .user_agent("rust-mojang/0.0.0")
-        .build()
+        .user_agent("rust-mojang/0.1.0")
+        .build();
+
+    #[cfg(not(feature = "timeout"))]
+    return AgentBuilder::new().user_agent("rust-mojang/0.1.0").build();
 }
 
 /// Rerutns (name, uuid, skin_url)

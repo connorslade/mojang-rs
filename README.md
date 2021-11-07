@@ -103,7 +103,7 @@ println!("Sales 24h: {}", s.last24h);
 println!("Sales / Sec: {}", s.sale_per_sec);
 ```
 
-### 🪨 Other
+### 🍞 Other
 
 Check if server is blocked by Mojang
 
