@@ -1,4 +1,4 @@
-use std::cell::{Ref, RefCell};
+use std::cell::RefCell;
 
 use crate::common;
 use crate::MojangError;
@@ -15,10 +15,6 @@ pub struct Player {
 
     /// Url of current player skin
     skin_url: RefCell<Option<String>>,
-    /// List of all player name changes
-    ///
-    /// Due to API limitations anything before the first name change will be the accounts original name.
-    name_changes: RefCell<Option<Vec<NameChange>>>,
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -55,7 +51,6 @@ impl Player {
                 uuid: resp.1,
                 name: resp.0,
                 skin_url: RefCell::new(None),
-                name_changes: RefCell::new(None),
             });
         }
 
@@ -66,7 +61,6 @@ impl Player {
             name,
             uuid,
             skin_url: RefCell::new(Some(skin_url)),
-            name_changes: RefCell::new(None),
         })
     }
 
@@ -77,35 +71,5 @@ impl Player {
         }
 
         Ok(self.skin_url.borrow().as_ref().unwrap().to_owned())
-    }
-
-    /// Get play name at Timestamp (ms)
-    ///
-    /// ## Example
-    /// ```rust
-    /// // Import Lib
-    /// use mojang::Player;
-    ///
-    /// // Load Name History Data into Player
-    /// let p = Player::new("Sigma76").unwrap();
-    ///
-    /// // Get name at timestamp
-    /// assert_eq!(p.name_at(16362446560000).unwrap(), "Sigma76");
-    /// ```
-    pub fn name_at(&self, time: u64) -> Result<String, MojangError> {
-        if self.name_changes.borrow().is_none() {
-            self.name_changes
-                .replace(Some(common::get_name_history(self.uuid.to_string())?));
-        }
-
-        let nc = self.name_changes.borrow();
-        let mut final_name = &self.name;
-        for name in nc.as_ref().unwrap() {
-            if name.time <= time {
-                final_name = &name.name;
-            }
-        }
-
-        Ok(final_name.to_owned())
     }
 }
