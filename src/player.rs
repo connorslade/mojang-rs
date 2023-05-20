@@ -1,9 +1,11 @@
 use std::cell::RefCell;
 
+use uuid::Uuid;
+
 use crate::common;
 use crate::MojangError;
 
-/// A Minecraft player.
+/// A public Minecraft account.
 #[derive(Debug, PartialEq, Eq)]
 pub struct Player {
     /// Player Name
@@ -11,7 +13,7 @@ pub struct Player {
     /// Player UUID
     ///
     /// All lowercase with no dashes
-    pub uuid: String,
+    pub id: Uuid,
 
     /// Url of current player skin
     skin_url: RefCell<Option<String>>,
@@ -48,7 +50,7 @@ impl Player {
         if name_uuid.to_string().len() < 16 {
             let resp = common::get_uuid(name_uuid.to_string())?;
             return Ok(Player {
-                uuid: resp.1,
+                id: Uuid::parse_str(&resp.1).unwrap(),
                 name: resp.0,
                 skin_url: RefCell::new(None),
             });
@@ -59,7 +61,7 @@ impl Player {
         let (name, uuid, skin_url) = common::get_profile(name_uuid.to_string())?;
         Ok(Player {
             name,
-            uuid,
+            id: Uuid::parse_str(&uuid).unwrap(),
             skin_url: RefCell::new(Some(skin_url)),
         })
     }
@@ -74,7 +76,7 @@ impl Player {
     pub fn skin_url(&self) -> Result<String, MojangError> {
         if self.skin_url.borrow().is_none() {
             self.skin_url
-                .replace(Some(common::get_profile(self.uuid.to_string())?.2));
+                .replace(Some(common::get_profile(self.id.to_string())?.2));
         }
 
         Ok(self.skin_url.borrow().as_ref().unwrap().to_owned())

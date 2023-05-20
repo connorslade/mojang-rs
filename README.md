@@ -41,7 +41,7 @@ let p1 = Player::new("Sigma76").unwrap();
 let p2 = Player::new("3c358264-b456-4bde-ab1e-fe1023db6679").unwrap();
 
 assert_eq!(p1.name, p2.name);
-assert_eq!(p1.uuid, p2.uuid);
+assert_eq!(p1.id, p2.id);
 ```
 
 Get Player Skin URL:

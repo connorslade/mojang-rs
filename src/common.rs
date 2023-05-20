@@ -35,6 +35,8 @@ pub fn get_profile(uuid: String) -> Result<(String, String, String), MojangError
         Err(e) => return Err(MojangError::RequestError(Box::new(e))),
     };
 
+    println!("{:?}", json);
+
     let name = match &json["name"] {
         JsonValue::String(i) => i.to_string(),
         _ => return Err(MojangError::ParseError),
