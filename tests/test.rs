@@ -28,13 +28,6 @@ fn test_get_skin_url() {
 }
 
 #[test]
-fn test_load_blocked_servers() {
-    let blocked = BlockedServers::new().unwrap();
-
-    assert!(blocked.len() >= 2220)
-}
-
-#[test]
 fn test_get_blocked_server() {
     let blocked = BlockedServers::new().unwrap();
 

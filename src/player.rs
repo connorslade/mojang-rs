@@ -64,6 +64,13 @@ impl Player {
         })
     }
 
+    /// Gets the skin url of the player.
+    /// ## Example
+    /// ```rust
+    /// # use mojang::Player;
+    /// let p = Player::new("Sigma76").unwrap();
+    /// let skin_url = p.skin_url().unwrap();
+    /// ```
     pub fn skin_url(&self) -> Result<String, MojangError> {
         if self.skin_url.borrow().is_none() {
             self.skin_url

@@ -14,8 +14,23 @@ pub enum MojangError {
     ReadError(io::Error),
 
     /// Ureq Request Error
-    RequestError(Error),
+    RequestError(Box<Error>),
+
+    /// IO Error
+    IoError(io::Error),
 
     /// Error parsing Data
     ParseError,
+}
+
+impl From<ureq::Error> for MojangError {
+    fn from(value: ureq::Error) -> Self {
+        MojangError::RequestError(Box::new(value))
+    }
+}
+
+impl From<io::Error> for MojangError {
+    fn from(value: io::Error) -> Self {
+        MojangError::IoError(value)
+    }
 }

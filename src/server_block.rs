@@ -33,20 +33,17 @@ impl BlockedServers {
     /// ```
     pub fn new() -> Result<BlockedServers, MojangError> {
         let agent = common::ureq_agent();
-        let resp = match agent
+        let resp = agent
             .get("https://sessionserver.mojang.com/blockedservers")
-            .call()
-        {
-            Ok(i) => i.into_string().unwrap(),
-            Err(e) => return Err(MojangError::RequestError(e)),
-        };
+            .call()?
+            .into_string()?;
 
         Ok(BlockedServers {
             hashes: resp.lines().map(|x| x.to_string()).collect(),
         })
     }
 
-    /// Check if supplyd Url or IPv4 adress is in the blocklist
+    /// Check if supplied Url or IPv4 address is in the block-list
     /// ## Example
     /// ```rust
     /// // Import Lib
@@ -87,10 +84,6 @@ impl BlockedServers {
         }
         blocked
     }
-
-    pub fn len(&self) -> usize {
-        self.hashes.len()
-    }
 }
 
 fn check_if_blocked(hashes: &[String], to_check: String) -> bool {
@@ -102,7 +95,7 @@ fn check_if_blocked(hashes: &[String], to_check: String) -> bool {
 }
 
 fn is_v4_ip(ip: Vec<&str>) -> bool {
-    // If thare are too many sections
+    // If there are too many sections
     if ip.len() != 4 {
         return false;
     }

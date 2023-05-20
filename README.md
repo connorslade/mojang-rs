@@ -1,4 +1,4 @@
-# 🕹️ mojang-rs <a href="https://github.com/Basicprogrammer10/Rust-Mojang/actions"><img src="https://img.shields.io/github/workflow/status/Basicprogrammer10/Rust-Mojang/Rust?label=Tests"></a> <img src="https://img.shields.io/tokei/lines/github/Basicprogrammer10/Rust-Mojang?label=Total%20Lines"></a> <a href="https://crates.io/crates/mojang"><img src="https://img.shields.io/crates/d/mojang?label=Downloads"></a>
+# 🕹️ mojang-rs <a href="https://github.com/Basicprogrammer10/Rust-Mojang/actions"><img src="https://github.com/Basicprogrammer10/mojang-rs/actions/workflows/rust.yml/badge.svg"></a> <a href="https://crates.io/crates/mojang"><img src="https://img.shields.io/crates/d/mojang?label=Downloads"></a>
 
 Rust Interface to the Mojang API!
 
@@ -8,20 +8,28 @@ Just add the following to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-mojang = "0.1.0"
+mojang = "0.2.0"
+```
+
+Or use the cargo add subcommand:
+
+```sh
+cargo add mojang
 ```
 
 ## 📄 Info
 
-Unofficial Rust Crate that interfaces with the Mojang HTTP API. Mojang API docs [here](https://wiki.vg/Mojang_API)
+This is an unofficial Rust crate that interfaces with the Mojang HTTP API.
+You can view the Mojang API docs [here](https://wiki.vg/Mojang_API).
+Note: Mojang has recently removed the ability to get sale statistics or username history from the API.
 
-For more information on this lib check the docs [here](https://crates.io/crates/mojang)
+For more information on this lib check the docs [here](https://crates.io/crates/mojang).
 
 ## 💥 Examples
 
 ### 🦦 Players
 
-Get UUID from name / Name from UUID
+Get UUID from name or Name from UUID:
 
 ```rust
 // Import lib
@@ -36,7 +44,7 @@ assert_eq!(p1.name, p2.name);
 assert_eq!(p1.uuid, p2.uuid);
 ```
 
-Get Player Skin URL
+Get Player Skin URL:
 
 ```rust
 // Import lib
@@ -51,13 +59,13 @@ assert_eq!(p.skin_url().unwrap(), "http://textures.minecraft.net/texture/c05f5ef
 
 ### 🔮 Other
 
-Check if server is blocked by Mojang
+Check if server is blocked by Mojang:
 
 ```rust
 // Import Lib
 use mojang::BlockedServers;
 
-// Get Blocked Servers (Hashes only)
+// Get Blocked Servers
 let blocked = BlockedServers::new().unwrap();
 
 // Check if server is blocked
