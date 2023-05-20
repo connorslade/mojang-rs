@@ -1,8 +1,0 @@
-- [X] isServerBlocked
-- [X] getNameHistory
-- [X] getNameAtDate
-- [X] nameToUuid
-- [X] uuidToName
-- [X] getSkin
-- [X] stats
-- [X] player

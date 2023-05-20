@@ -5,9 +5,10 @@ use tinyjson::JsonValue;
 use ureq::Agent;
 use ureq::AgentBuilder;
 
+use crate::player::NameChange;
 use crate::MojangError;
 
-/// Defult Agent for all Requests
+/// Default Agent for all Requests
 pub fn ureq_agent() -> Agent {
     #[cfg(feature = "timeout")]
     return AgentBuilder::new()
@@ -89,7 +90,7 @@ pub fn get_uuid(name: String) -> Result<(String, String), MojangError> {
     }
 }
 
-pub fn get_name_history(uuid: String) -> Result<Vec<(u64, String)>, MojangError> {
+pub fn get_name_history(uuid: String) -> Result<Vec<NameChange>, MojangError> {
     let agent = ureq_agent();
     let json = match agent
         .get(&format!(
@@ -114,7 +115,7 @@ pub fn get_name_history(uuid: String) -> Result<Vec<(u64, String)>, MojangError>
             _ => return Err(MojangError::ParseError),
         };
 
-        let changed_at = match &name_json {
+        let time = match &name_json {
             JsonValue::Object(i) => match i.get("changedToAt") {
                 Some(i) => match i {
                     JsonValue::Number(i) => *i as u64,
@@ -125,7 +126,7 @@ pub fn get_name_history(uuid: String) -> Result<Vec<(u64, String)>, MojangError>
             _ => return Err(MojangError::ParseError),
         };
 
-        names_out.push((changed_at, name));
+        names_out.push(NameChange { name, time });
     }
 
     Ok(names_out)

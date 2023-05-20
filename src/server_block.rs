@@ -18,7 +18,7 @@ use crate::MojangError;
 #[derive(Debug, Clone)]
 pub struct BlockedServers {
     /// Hashes of all Blocked Servers
-    pub hashes: Vec<String>,
+    hashes: Vec<String>,
 }
 
 impl BlockedServers {
@@ -86,6 +86,10 @@ impl BlockedServers {
                 || check_if_blocked(&self.hashes, format!("*.{}", server_parts[i..].join(".")));
         }
         blocked
+    }
+
+    pub fn len(&self) -> usize {
+        self.hashes.len()
     }
 }
 

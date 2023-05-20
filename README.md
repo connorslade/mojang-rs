@@ -1,4 +1,4 @@
-# 🕹️ mojang <a href="https://github.com/Basicprogrammer10/Rust-Mojang/actions"><img src="https://img.shields.io/github/workflow/status/Basicprogrammer10/Rust-Mojang/Rust?label=Tests"></a> <img src="https://img.shields.io/tokei/lines/github/Basicprogrammer10/Rust-Mojang?label=Total%20Lines"></a> <a href="https://crates.io/crates/mojang"><img src="https://img.shields.io/crates/d/mojang?label=Downloads"></a>
+# 🕹️ mojang-rs <a href="https://github.com/Basicprogrammer10/Rust-Mojang/actions"><img src="https://img.shields.io/github/workflow/status/Basicprogrammer10/Rust-Mojang/Rust?label=Tests"></a> <img src="https://img.shields.io/tokei/lines/github/Basicprogrammer10/Rust-Mojang?label=Total%20Lines"></a> <a href="https://crates.io/crates/mojang"><img src="https://img.shields.io/crates/d/mojang?label=Downloads"></a>
 
 Rust Interface to the Mojang API!
 
