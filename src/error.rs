@@ -5,6 +5,9 @@ use ureq::Error;
 /// Various errors that can come from the function in this crate
 #[derive(Debug)]
 pub enum MojangError {
+    /// The request is invalid
+    InvalidRequest(String),
+
     /// IO Error while reading a stream
     ReadError(io::Error),
 
@@ -16,6 +19,9 @@ pub enum MojangError {
 
     /// Error parsing Json
     ParseError(serde_json::Error),
+
+    /// Error parsing UUID
+    InvalidUuid(uuid::Error),
 }
 
 impl From<ureq::Error> for MojangError {
@@ -33,5 +39,11 @@ impl From<io::Error> for MojangError {
 impl From<serde_json::Error> for MojangError {
     fn from(value: serde_json::Error) -> Self {
         MojangError::ParseError(value)
+    }
+}
+
+impl From<uuid::Error> for MojangError {
+    fn from(value: uuid::Error) -> Self {
+        MojangError::InvalidUuid(value)
     }
 }
