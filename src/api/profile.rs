@@ -1,68 +1,44 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, str::FromStr};
 
 use serde::{
     de::{self, Visitor},
     Deserialize,
 };
-use serde_json::Value;
 use uuid::Uuid;
 
+use super::Url;
 use crate::Result;
 
-use super::Url;
-
-/*
-{
-    "id": "<profile identifier>",
-    "name": "<player name>",
-    "properties": [
-        {
-            "name": "textures",
-            "value": "<base64 string>",
-            "signature": "<base64 string; signed data using Yggdrasil's private key>" // Only provided if ?unsigned=false is appended to url
-        }
-    ]
-}
-*/
-
-/*
-{
-    "timestamp": <java time in ms>,
-    "profileId": "<profile uuid>",
-    "profileName": "<player name>",
-    "signatureRequired": true, // Only present if ?unsigned=false is appended to url
-    "textures": {
-        "SKIN": {
-            "url": "<player skin URL>",
-            "metadata": {
-                "model": "slim"
-            }
-        },
-        "CAPE": {
-            "url": "<player cape URL>"
-        }
-    }
-}
-*/
-
+/// A player's public profile
 #[derive(Debug)]
 pub struct Profile {
+    /// The player's UUID
     pub id: Uuid,
+    /// The player's current username
     pub name: String,
+    /// The player's skin
     pub skin: Skin,
 }
 
+/// A player's skin.
+/// Includes the skin and cape URLs, as well as the model type.
 #[derive(Debug)]
 pub struct Skin {
+    /// Skin URL
     pub url: Url,
+    /// Player model type
     pub model: Model,
+    /// Optional cape URL
     pub cape: Option<Url>,
 }
 
+/// Skin model type
 #[derive(Debug)]
 pub enum Model {
-    Slim,
+    /// The original player model
     Normal,
+    /// The slim player model
+    Slim,
 }
 
 /// This will return the player's username plus any additional information about them (e.g. skins).
@@ -87,6 +63,34 @@ impl<'de> Deserialize<'de> for Profile {
     where
         D: serde::Deserializer<'de>,
     {
+        #[derive(Deserialize)]
+        struct TextureContainer {
+            textures: Textures,
+        }
+
+        #[derive(Deserialize)]
+        #[serde(rename_all = "UPPERCASE")]
+        struct Textures {
+            skin: SkinTexture,
+            cape: Option<CapeTexture>,
+        }
+
+        #[derive(Deserialize)]
+        struct SkinTexture {
+            url: String,
+            metadata: Option<SkinMetadata>,
+        }
+
+        #[derive(Deserialize)]
+        struct CapeTexture {
+            url: String,
+        }
+
+        #[derive(Deserialize)]
+        struct SkinMetadata {
+            model: String,
+        }
+
         struct ProfileVisitor;
 
         impl<'de> Visitor<'de> for ProfileVisitor {
@@ -148,12 +152,27 @@ impl<'de> Deserialize<'de> for Profile {
                     })
                     .map(|x| String::from_utf8_lossy(&x).into_owned())?;
 
+                println!("{}", decoded);
+
+                let textures = serde_json::from_str::<TextureContainer>(&decoded)
+                    .map_err(|x| {
+                        de::Error::custom(format!("Error deserializing skin: {}", x.to_string()))
+                    })?
+                    .textures;
+
+                let model = textures
+                    .skin
+                    .metadata
+                    .map_or(Model::Normal, |x| x.model.parse().unwrap_or(Model::Normal));
+
                 Ok(Profile {
                     id: id.ok_or_else(|| de::Error::missing_field("id"))?,
                     name: name.ok_or_else(|| de::Error::missing_field("name"))?,
-                    skin: serde_json::from_str(&decoded).map_err(|x| {
-                        de::Error::custom(format!("Error deserializing skin: {}", x.to_string()))
-                    })?,
+                    skin: Skin {
+                        url: Url(textures.skin.url),
+                        model,
+                        cape: textures.cape.map(|x| Url(x.url)),
+                    },
                 })
             }
         }
@@ -163,35 +182,14 @@ impl<'de> Deserialize<'de> for Profile {
     }
 }
 
-impl<'de> Deserialize<'de> for Skin {
-    fn deserialize<D>(des: D) -> std::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        struct SkinVisitor;
+impl FromStr for Model {
+    type Err = String;
 
-        impl<'de> Visitor<'de> for SkinVisitor {
-            type Value = Skin;
-
-            fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-                formatter.write_str("struct Skin")
-            }
-
-            fn visit_map<A>(self, mut map: A) -> std::result::Result<Self::Value, A::Error>
-            where
-                A: serde::de::MapAccess<'de>,
-            {
-                while let Some((_, _)) = map.next_entry::<Value, Value>()? {}
-
-                Ok(Skin {
-                    url: Url("".to_owned()),
-                    model: Model::Normal,
-                    cape: None,
-                })
-            }
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        match s.to_ascii_lowercase().as_str() {
+            "slim" => Ok(Model::Slim),
+            "normal" => Ok(Model::Normal),
+            _ => Err(format!("Unknown model: {}", s)),
         }
-
-        const FIELDS: &[&str] = &["skin", "model", "cape"];
-        des.deserialize_struct("Skin", FIELDS, SkinVisitor)
     }
 }
