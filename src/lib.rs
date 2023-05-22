@@ -5,12 +5,12 @@ type Result<T> = result::Result<T, MojangError>;
 
 pub mod api;
 mod common;
-mod mojang_error;
+mod error;
 mod player;
 mod server_block;
 
 use std::result;
 
-pub use mojang_error::MojangError;
+pub use error::MojangError;
 pub use player::Player;
 pub use server_block::BlockedServers;
