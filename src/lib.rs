@@ -1,4 +1,4 @@
-#![doc = include_str!("../README.md")]
+// #![doc = include_str!("../README.md")]
 #![warn(missing_docs)]
 
 type Result<T> = result::Result<T, MojangError>;

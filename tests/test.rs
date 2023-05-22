@@ -7,7 +7,6 @@ fn test_make_player_name() {
     )
     .unwrap();
     dbg!(&profile);
-    panic!()
 }
 
 #[test]
